@@ -38,6 +38,10 @@ parser.add_argument(
     default=0,
     metavar='NUM_SPACES',
     help='How many spaces to indent output')
+parser.add_argument(
+    '--always-quote',
+    action='store_true',
+    help='Whether to put all titles in quotes ("")')
 
 # Parse given arguments
 args = parser.parse_args()
@@ -53,9 +57,10 @@ if args.html_file:
     with args.html_file.open('r') as file_handle:
         html = file_handle.read()
 
-# Extract content and go through each poster element
+# Create BeautifulSoup element of HTML
 webpage = BeautifulSoup(html, 'html.parser')
-# content = []
+
+# Get all posters in this set, classify by content type
 outputs = {'Collection': [], 'Movie': [], 'Show': []}
 for poster_element in webpage.find_all('div', class_='overlay rounded-poster'):
     # Get this poster's ID for URL recreation, content type, and title
@@ -63,13 +68,21 @@ for poster_element in webpage.find_all('div', class_='overlay rounded-poster'):
     content_type = poster_element.attrs['data-poster-type']
     title = poster_element.find('p', class_='p-0 mb-1 text-break').string
 
+    # Whether to quote title
+    quote = args.always_quote or any(char in title for char in (':', ))
+    title = f'"{title}"' if quote else title
+
     # Create strings for output
     url = POSTER_URL.format(id=poster_id)
-    outputs[content_type].append(f'"{title}":')
+    outputs[content_type].append(f'{title}:')
     outputs[content_type].append(f'{" " * args.spaces}url_poster: {url}')
 
 # Output each content type
 for content_type, content in outputs.items():
+    # Skip empty content
+    if len(content) == 0:
+        continue
+
     indent = " " * args.indent
     print(f'{indent}# {content_type}s')
     print(indent + f'\n{indent}'.join(content))
