@@ -21,7 +21,6 @@ def positive_int(arg: str) -> int:
 parser = ArgumentParser(description='TPDb Collection Maker')
 parser.add_argument(
     'html',
-    dest='html_file',
     type=Path,
     metavar='HTML_FILE',
     help='File with TPDb Collection page HTML to scrape')
@@ -46,15 +45,13 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Get page HTML from file if provided
-if args.html_file:
-    # Verify file exists
-    if not args.html_file.exists():
-        print(f'File "{args.html_file.resolve()}" does not exist')
-        exit(1)
+if not args.html.exists():
+    print(f'File "{args.html_file.resolve()}" does not exist')
+    exit(1)
 
-    # Open file and read content
-    with args.html_file.open('r') as file_handle:
-        html = file_handle.read()
+# Open file and read content
+with args.html.open('r') as file_handle:
+    html = file_handle.read()
 
 # Create BeautifulSoup element of HTML
 webpage = BeautifulSoup(html, 'html.parser')
