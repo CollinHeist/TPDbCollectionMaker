@@ -20,10 +20,9 @@ def positive_int(arg: str) -> int:
 # Create ArgumentParser object and arguments
 parser = ArgumentParser(description='TPDb Collection Maker')
 parser.add_argument(
-    '--html', '--html-file',
+    'html',
     dest='html_file',
     type=Path,
-    required=True,
     metavar='HTML_FILE',
     help='File with TPDb Collection page HTML to scrape')
 parser.add_argument(
