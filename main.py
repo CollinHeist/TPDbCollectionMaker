@@ -21,14 +21,13 @@ parser.add_argument(
     action='store_true',
     help='Whether to put all titles in quotes ("")')
 
-
 class Content:
 
     """Poster URL format for all TPDb posters"""
     POSTER_URL = 'https://theposterdb.com/api/assets/{id}'
 
     """Regex to match yearless titles and season names from full titles"""
-    YEARLESS_REGEX = re_compile(r'^(.*) \(\d+\)($| - (Season \d+)|(Specials))')
+    YEARLESS_REGEX = re_compile(r'^(.*) \(\d+\)($| - (?:Season \d+|(Specials)))$')
     SEASON_REGEX = re_compile(r'^.* - (?:Season (\d+)|(Specials))$')
 
     __slots__ = (
@@ -129,7 +128,6 @@ class ContentList:
         }
 
     def add_content(self, new: Content) -> None:
-        # print(f'ADDING {new!r}')
         # Check if new content belongs to any existing shows
         for existing in self.content['Show']:
             if new.is_sub_content_of(existing):
@@ -140,7 +138,6 @@ class ContentList:
         # Check if any existing seasons belong to new content
         for existing in self.content['Season']:
             if new.is_parent_content_of(existing):
-                # print(f'{new!r} is parent content of {existing!r}\n')
                 new.add_sub_content(existing)
 
         # Check for content of this same title
