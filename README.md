@@ -18,9 +18,6 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --spaces NUM_SPACES, --spacing NUM_SPACES
-                        How many spaces to use in indentation
-  --indent NUM_SPACES   How many spaces to indent output
   --always-quote        Whether to put all titles in quotes ("")
 ```
 
@@ -61,36 +58,6 @@ Right-click the `<html class="h-100" lang="en"><head>` element, go to `Copy` > `
 ## Arguments
 ### `html`
 Input HTML file to parse.
-
-### `--spaces`, `--spacing`
-How many spaces to intent the `url_poster` value (relative to the title). If unspecified, 2 spaces are used.
-
-Below is an example of 4 spaces:
-
-```console
-# pipenv run python main.py in.html --spacing 4
-Iron Man (2008):
-    url_poster: https://theposterdb.com/api/assets/9773
-The Incredible Hulk (2008):
-    url_poster: https://theposterdb.com/api/assets/9775
-Iron Man 2 (2010):
-    url_poster: https://theposterdb.com/api/assets/9776
-```
-
-### `--indent`
-How many spaces to indent the entire output. If unspecified, no indent is used.
-
-Below is an example of 2 spaces:
-
-```console
-# pipenv run python main.py in.html --indent 2
-  Iron Man (2008):
-    url_poster: https://theposterdb.com/api/assets/9773
-  The Incredible Hulk (2008):
-    url_poster: https://theposterdb.com/api/assets/9775
-  Iron Man 2 (2010):
-    url_poster: https://theposterdb.com/api/assets/9776
-```
 
 ### `--always-quote`
 Whether to quote all titles in the output. If unspecified, only titles with colons are titled.
