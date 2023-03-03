@@ -21,13 +21,19 @@ parser.add_argument(
     action='store_true',
     help='Whether to put all titles in quotes ("")')
 
+ContentType = Literal['Category', 'Collection', 'Show', 'Movie']
+
 class Content:
+    """
+    This class describes some type of content. Content contains a poster ID,
+    a type, title, year, and a URL.
+    """
 
     """Poster URL format for all TPDb posters"""
     POSTER_URL = 'https://theposterdb.com/api/assets/{id}'
 
     """Regex to match yearless titles and season names from full titles"""
-    YEARLESS_REGEX = re_compile(r'^(.*) \(\d+\)($| - (?:Season \d+|(Specials)))$')
+    YEARLESS_REGEX=re_compile(r'^(.*) \(\d+\)($| - (?:Season \d+|(Specials)))$')
     SEASON_REGEX = re_compile(r'^.* - (?:Season (\d+)|(Specials))$')
 
     __slots__ = (
@@ -36,8 +42,19 @@ class Content:
     )
 
     def __init__(self, poster_id: int,
-                 content_type: Literal['Collection', 'Show', 'Movie'],
-                 title: str, *, must_quote: bool=False) -> None:
+            content_type: ContentType,
+            title: str, *,
+            must_quote: bool = False) -> None:
+        """
+        Initialize the content described by the given attributes.
+
+        Args:
+            poster_id: TPDb poster ID of the content.
+            content_type: Type of content being created.
+            title: Title of the content.
+            must_quote: Override for whether the finalized title of this
+                content should be quoted or not. Keyword only.
+        """
 
         self.poster_id = poster_id
         self.content_type = content_type
@@ -69,8 +86,8 @@ class Content:
     @property
     def final_title(self) -> str:
         """
-        Get the finalized title for this Content. Quoted and utilizing the year
-        if necessary.
+        Get the finalized title for this Content. Quoted and utilizing
+        the year if necessary.
         """
 
         title = self.title if self.use_year else self.yearless_title
@@ -86,7 +103,13 @@ class Content:
 
 
     def __str__(self) -> str:
-        if self.content_type in ('Collection', 'Movie'):
+        """
+        Get the string representation of this content. This is the
+        formatted content string used within PMM, and the return format
+        depends on the content type of this object.
+        """
+
+        if self.content_type in ('Category', 'Collection', 'Movie'):
             return f'{self.final_title}:\n  url_poster: {self.url}'
         elif self.content_type == 'Show':
             base = f'{self.final_title}:\n  url_poster: {self.url}'
@@ -103,6 +126,19 @@ class Content:
 
 
     def is_sub_content_of(self, content: 'Content') -> bool:
+        """
+        Determine whether the given content object is the parent content
+        of this object. 
+
+        Args:
+            content: Object being compared against.
+
+        Returns:
+            True if the given object is the parent of this content.
+            False otherwise.
+        """
+
+        # Only a show can have a season child
         if self.content_type != 'Season' or content.content_type != 'Show':
             return False
 
@@ -111,16 +147,31 @@ class Content:
 
     
     def is_parent_content_of(self, content: 'Content') -> bool:
+        """Logical composite of `is_sub_content_of` on this object."""
+
         return content.is_sub_content_of(self)
 
 
     def add_sub_content(self, content: 'Content') -> None:
+        """
+        Add the given content as sub content of this object.
+
+        Args:
+            content: Sub-content being added.
+        """
+
         self.sub_content[content.season_number] = content
 
 
 class ContentList:
+    """
+    This class describes a container list of Content objects. This is
+    a glorified dictionary of lists for each content type
+    """
+
     def __init__(self) -> None:
-        self.content: dict[str, Iterable[Content]] = {
+        self.content: dict[ContentType, Iterable[Content]] = {
+            'Category': [],
             'Collection': [],
             'Movie': [],
             'Show': [],
@@ -128,6 +179,15 @@ class ContentList:
         }
 
     def add_content(self, new: Content) -> None:
+        """
+        Add the given content to this object. This finds any existing
+        content the new content could be a child or parent of, and adds
+        this object to them if indicated.
+
+        Args:
+            new: Content being added.
+        """
+
         # Check if new content belongs to any existing shows
         for existing in self.content['Show']:
             if new.is_sub_content_of(existing):
@@ -148,7 +208,13 @@ class ContentList:
 
         self.content[new.content_type].append(new)
 
+
     def print(self) -> None:
+        """
+        Print this object. This prints segmented sections of each type
+        of Content in this object.
+        """
+
         # Print each content group
         for content_type, content_list in self.content.items():
             # Don't print empty content sets, or base seasons
@@ -159,6 +225,7 @@ class ContentList:
             print(f'# {"-"*80}\n# {content_type}s')
             for content in content_list:
                 print(str(content))
+
 
 """If file is entrypoint, parse args"""
 if __name__ == '__main__':
