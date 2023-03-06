@@ -37,17 +37,18 @@ Marvel's Luke Cage:
 This is a Python command-line tool. All arguments are shown with `--help`:
 
 ```console
-# pipenv run python main.py -h                       CollinHeist@Collins-MacBook-Pro
-usage: main.py [-h] [--always-quote] HTML_FILE
+# pipenv run python main.py -h
+usage: main.py [-h] [-p] [-q] HTML_FILE
 
 TPDb Collection Maker
 
 positional arguments:
-  HTML_FILE       File with TPDb Collection page HTML to scrape
+  HTML_FILE           file with TPDb Collection page HTML to scrape
 
 optional arguments:
-  -h, --help      show this help message and exit
-  --always-quote  Whether to put all titles in quotes ("")
+  -h, --help          show this help message and exit
+  -p, --primary-only  only parse the primary set (ignore any Additional Sets)
+  -q, --always-quote  put all titles in quotes ("")
   ```
 
 ## Installation
@@ -87,8 +88,11 @@ Right-click the `<html class="h-100" lang="en"><head>` element, go to `Copy` > `
 ### `html`
 Input HTML file to parse.
 
-### `--always-quote`
-Whether to quote all titles in the output. If unspecified, only titles with colons are titled.
+### `-p`, `--primary-only`
+Only parse the primary content on the given HTML page, ignoring any Additional Sets. If unspecified, then the entire page is parsed.
+
+### `-q`, `--always-quote`
+Quote all titles in the output. If unspecified, only titles with colons are titled.
 
 Below is an example of this argument:
 
