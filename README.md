@@ -74,7 +74,7 @@ This should launch your browser's HTML inspector. It should look something like:
 
 <img src="https://user-images.githubusercontent.com/17693271/168729837-eacfc4d8-29d3-4968-80f2-17ed164a8884.jpg" width="600"/>
 
-Go to the top-most HTML element (if HTML is selected, use the left-arrow key to collapse all the HTML). The top-most HTML should look like:
+Go to the top-most HTML element (if HTML is selected, hold the left-arrow key to collapse all the HTML). The top-most HTML should look like:
 
 ```html
 <!DOCTYPE html>
@@ -82,7 +82,7 @@ Go to the top-most HTML element (if HTML is selected, use the left-arrow key to 
 ...
 ```
 
-Right-click the `<html class="h-100" lang="en"><head>` element, go to `Copy` > `Inner HTML`. Your clipboard now has the coplete HTML of the set page; paste this into some file alongside the `main.py` file of this project. This file will be the input to the script (see below).
+Right-click the `<html class="h-100" lang="en"><head>` element, go to `Copy` > `Inner HTML`. Your clipboard now has the complete HTML of the set page; paste this into some file alongside the `main.py` file of this project. This file will be the input to the script (see below).
 
 ## Arguments
 ### `html`
