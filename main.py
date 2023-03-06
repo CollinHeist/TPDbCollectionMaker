@@ -9,17 +9,23 @@ except ImportError:
     print(f'Missing required packages - execute "pipenv install"')
     exit(1)
 
+PRIMARY_CONTENT_CLASS: str = 'row d-flex flex-wrap m-0 w-100 mx-n1 mt-n1'
+
 # Create ArgumentParser object and arguments
 parser = ArgumentParser(description='TPDb Collection Maker')
 parser.add_argument(
     'html',
     type=Path,
     metavar='HTML_FILE',
-    help='File with TPDb Collection page HTML to scrape')
+    help='file with TPDb Collection page HTML to scrape')
 parser.add_argument(
-    '--always-quote',
+    '-p', '--primary-only',
     action='store_true',
-    help='Whether to put all titles in quotes ("")')
+    help='only parse the primary set (ignore any Additional Sets)')
+parser.add_argument(
+    '-q', '--always-quote',
+    action='store_true',
+    help='put all titles in quotes ("")')
 
 ContentType = Literal['Category', 'Collection', 'Show', 'Movie']
 
@@ -244,18 +250,20 @@ if __name__ == '__main__':
     # Create BeautifulSoup element of HTML
     webpage = BeautifulSoup(html, 'html.parser')
 
-    # Get all posters in this set, classify by content type
-    content_list = ContentList()
-    for poster_element in webpage.find_all('div', class_='overlay rounded-poster'):
+    # If only doing primary content, filter webpage
+    if args.primary_only:
+        webpage = webpage.find('div', class_=PRIMARY_CONTENT_CLASS)
 
-        # Create Content object
-        content_list.add_content(
-            Content(
-                poster_element.attrs['data-poster-id'],
-                poster_element.attrs['data-poster-type'],
-                poster_element.find('p', class_='p-0 mb-1 text-break').string,
-                must_quote=args.always_quote,
-            )
+    # Get all posters in this set, create Content and add to list
+    content_list = ContentList()
+    for poster_element in webpage.find_all('div',
+                                           class_='overlay rounded-poster'):
+        content = Content(
+            poster_element.attrs['data-poster-id'],
+            poster_element.attrs['data-poster-type'],
+            poster_element.find('p', class_='p-0 mb-1 text-break').string,
+            must_quote=args.always_quote,
         )
+        content_list.add_content(content)
 
     content_list.print()
