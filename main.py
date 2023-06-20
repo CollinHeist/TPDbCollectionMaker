@@ -27,7 +27,7 @@ parser.add_argument(
     action='store_true',
     help='put all titles in quotes ("")')
 
-ContentType = Literal['Category', 'Collection', 'Show', 'Movie']
+ContentType = Literal['Category', 'Collection', 'Show', 'Movie', 'Company']
 
 class Content:
     """
@@ -115,7 +115,7 @@ class Content:
         depends on the content type of this object.
         """
 
-        if self.content_type in ('Category', 'Collection', 'Movie'):
+        if self.content_type in ('Category', 'Collection', 'Movie', 'Company'):
             return f'{self.final_title}:\n  url_poster: {self.url}'
         elif self.content_type == 'Show':
             base = f'{self.final_title}:\n  url_poster: {self.url}'
@@ -182,6 +182,7 @@ class ContentList:
             'Movie': [],
             'Show': [],
             'Season': [],
+            'Company': [],
         }
 
     def add_content(self, new: Content) -> None:
