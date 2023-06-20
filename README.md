@@ -37,7 +37,7 @@ Marvel's Luke Cage:
 This is a Python command-line tool. All arguments are shown with `--help`:
 
 ```console
-# pipenv run python main.py -h
+$ pipenv run python main.py -h
 usage: main.py [-h] [-p] [-q] HTML_FILE
 
 TPDb Collection Maker
@@ -52,17 +52,18 @@ optional arguments:
   ```
 
 ## Installation
+> NOTE: If copying these commands, do __not__ copy the `$` - that is just to show this is a _command_.
 1. Install `pipenv`:
 ```console
-# pip3 install pipenv
+$ pip3 install pipenv
 ```
 2. Install required packages:
 ```console
-# pipenv install
+$ pipenv install
 ```
 3. Download this tool:
 ```console
-# git clone https://github.com/CollinHeist/TPDbCollectionMaker/
+$ git clone https://github.com/CollinHeist/TPDbCollectionMaker/
 ```
 
 ## Getting Page HTML
@@ -97,7 +98,7 @@ Quote all titles in the output. If unspecified, only titles with colons are titl
 Below is an example of this argument:
 
 ```console
-# pipenv run python main.py in.html --always-quote
+$ pipenv run python main.py in.html --always-quote
 "Iron Man (2008)":
   url_poster: https://theposterdb.com/api/assets/9773
 "The Incredible Hulk (2008)":
