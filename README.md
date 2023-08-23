@@ -93,7 +93,7 @@ Input HTML file to parse.
 Only parse the primary content on the given HTML page, ignoring any Additional Sets. If unspecified, then the entire page is parsed.
 
 ### `-q`, `--always-quote`
-Quote all titles in the output. If unspecified, only titles with colons are titled.
+Quote all titles in the output. If unspecified, only titles with colons are quoted.
 
 Below is an example of this argument:
 
