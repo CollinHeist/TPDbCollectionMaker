@@ -27,7 +27,11 @@ parser.add_argument(
     action='store_true',
     help='put all titles in quotes ("")')
 
-ContentType = Literal['Category', 'Collection', 'Show', 'Movie', 'Company']
+
+ContentType = Literal[
+    'Category', 'Collection', 'Show', 'Movie', 'Company', 'Season'
+]
+
 
 class Content:
     """
@@ -185,6 +189,21 @@ class ContentList:
             'Company': [],
         }
 
+
+    def __bool__(self) -> bool:
+        """Whether this object contains any content."""
+
+        return any(content for content in self.content.values())
+    
+
+    def __repr__(self) -> str:
+        return f'<ContentList {self.content}>'
+    
+
+    def __divider(self, label: str, /) -> str:
+        return f'\n# {"-"*80}\n# {label}\n# {"-" * 80}'
+
+
     def add_content(self, new: Content) -> None:
         """
         Add the given content to this object. This finds any existing
@@ -225,12 +244,19 @@ class ContentList:
         # Print each content group
         for content_type, content_list in self.content.items():
             # Don't print empty content sets, or base seasons
-            if len(content_list) == 0 or content_type == 'Season':
+            if not content_list or content_type == 'Season':
                 continue
 
             # Print divider, content type header, and all content
-            print(f'# {"-"*80}\n# {content_type}s')
+            print(self.__divider(content_type + 's'))
             for content in content_list:
+                # print(f'{content=!r}')
+                print(str(content))
+
+        # Print season content if no parent show content was parsed
+        if self.content['Season'] and not self.content['Show']:
+            print(self.__divider('Unassigned Content'))
+            for content in self.content['Season']:
                 print(str(content))
 
 
@@ -267,4 +293,7 @@ if __name__ == '__main__':
         )
         content_list.add_content(content)
 
-    content_list.print()
+    if content_list:
+        content_list.print()
+    else:
+        print(f'No content identified!')
