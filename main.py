@@ -9,7 +9,6 @@ except ImportError:
     print(f'Missing required packages - execute "pipenv install"')
     exit(1)
 
-PRIMARY_CONTENT_CLASS: str = 'row d-flex flex-wrap m-0 w-100 mx-n1 mt-n1'
 
 # Create ArgumentParser object and arguments
 parser = ArgumentParser(description='TPDb Collection Maker')
@@ -29,8 +28,9 @@ parser.add_argument(
 
 
 ContentType = Literal[
-    'Category', 'Collection', 'Show', 'Movie', 'Company', 'Season'
+    'category', 'collection', 'show', 'movie', 'company', 'season'
 ]
+PRIMARY_CONTENT_CLASS: str = 'row d-flex flex-wrap m-0 w-100 mx-n1 mt-n1'
 
 
 class Content:
@@ -83,7 +83,7 @@ class Content:
         if (season_group := self.SEASON_REGEX.match(self.title)) is None:
             self.season_number = None
         else:
-            self.content_type = 'Season'
+            self.content_type = 'season'
             if season_group.group(2) == 'Specials':
                 self.season_number = 0
             else:
@@ -105,9 +105,10 @@ class Content:
 
 
     def __repr__(self) -> str:
-        attributes = ', '.join(f'{attr}={getattr(self, attr)!r}'
-                               for attr in self.__slots__
-                               if not attr.startswith('__'))
+        attributes = ', '.join(
+            f'{attr}={getattr(self, attr)!r}' for attr in self.__slots__
+            if not attr.startswith('__')
+        )
 
         return f'<Content {attributes}>'
 
@@ -119,9 +120,9 @@ class Content:
         depends on the content type of this object.
         """
 
-        if self.content_type in ('Category', 'Collection', 'Movie', 'Company'):
+        if self.content_type in ('category', 'collection', 'movie', 'company'):
             return f'{self.final_title}:\n  url_poster: {self.url}'
-        elif self.content_type == 'Show':
+        elif self.content_type == 'show':
             base = f'{self.final_title}:\n  url_poster: {self.url}'
             if len(self.sub_content) > 0:
                 sub = '\n    '.join(str(self.sub_content[season])
@@ -129,10 +130,10 @@ class Content:
                 return f'{base}\n  seasons:\n    {sub}'
             
             return base
-        elif self.content_type == 'Season':
+        elif self.content_type == 'season':
             return f'{self.season_number}: ' + '{url_poster: ' + self.url + '}'
-        else:
-            return f'<Bad content type "{self.content_type}">'
+
+        return f'<Bad content type "{self.content_type}">'
 
 
     def is_sub_content_of(self, content: 'Content') -> bool:
@@ -149,7 +150,7 @@ class Content:
         """
 
         # Only a show can have a season child
-        if self.content_type != 'Season' or content.content_type != 'Show':
+        if self.content_type != 'season' or content.content_type != 'show':
             return False
 
         return (content.yearless_title == self.yearless_title
@@ -179,14 +180,15 @@ class ContentList:
     a glorified dictionary of lists for each content type
     """
 
+
     def __init__(self) -> None:
         self.content: dict[ContentType, Iterable[Content]] = {
-            'Category': [],
-            'Collection': [],
-            'Movie': [],
-            'Show': [],
-            'Season': [],
-            'Company': [],
+            'category': [],
+            'collection': [],
+            'movie': [],
+            'show': [],
+            'season': [],
+            'company': [],
         }
 
 
@@ -215,14 +217,14 @@ class ContentList:
         """
 
         # Check if new content belongs to any existing shows
-        for existing in self.content['Show']:
+        for existing in self.content['show']:
             if new.is_sub_content_of(existing):
                 existing.add_sub_content(new)
                 # Can only belong to one show, stop looping
                 break
 
         # Check if any existing seasons belong to new content
-        for existing in self.content['Season']:
+        for existing in self.content['season']:
             if new.is_parent_content_of(existing):
                 new.add_sub_content(existing)
 
@@ -244,7 +246,7 @@ class ContentList:
         # Print each content group
         for content_type, content_list in self.content.items():
             # Don't print empty content sets, or base seasons
-            if not content_list or content_type == 'Season':
+            if not content_list or content_type == 'season':
                 continue
 
             # Print divider, content type header, and all content
@@ -254,9 +256,9 @@ class ContentList:
                 print(str(content))
 
         # Print season content if no parent show content was parsed
-        if self.content['Season'] and not self.content['Show']:
+        if self.content['season'] and not self.content['show']:
             print(self.__divider('Unassigned Content'))
-            for content in self.content['Season']:
+            for content in self.content['season']:
                 print(str(content))
 
 
@@ -287,7 +289,7 @@ if __name__ == '__main__':
                                            class_='overlay rounded-poster'):
         content = Content(
             poster_element.attrs['data-poster-id'],
-            poster_element.attrs['data-poster-type'],
+            poster_element.attrs['data-poster-type'].lower(),
             poster_element.find('p', class_='p-0 mb-1 text-break').string,
             must_quote=args.always_quote,
         )
