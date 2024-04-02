@@ -96,8 +96,8 @@ class Content:
     @property
     def final_title(self) -> str:
         """
-        Get the finalized title for this Content. Quoted and utilizing
-        the year if necessary.
+        The finalized title for this Content. Quoted and utilizing the
+        year if necessary.
         """
 
         title = self.title if self.use_year else self.yearless_title
@@ -115,9 +115,9 @@ class Content:
 
     def __str__(self) -> str:
         """
-        Get the string representation of this content. This is the
-        formatted content string used within PMM, and the return format
-        depends on the content type of this object.
+        The string representation of this content. This is the formatted
+        content string used within PMM, and the return format depends on
+        the content type of this object.
         """
 
         if self.content_type in ('category', 'collection', 'movie', 'company'):
@@ -176,8 +176,8 @@ class Content:
 
 class ContentList:
     """
-    This class describes a container list of Content objects. This is
-    a glorified dictionary of lists for each content type
+    This class describes a container list of Content objects. This is a
+    glorified dictionary of lists for each content type
     """
 
 
@@ -277,16 +277,15 @@ if __name__ == '__main__':
         html = file_handle.read()
 
     # Create BeautifulSoup element of HTML
-    webpage = BeautifulSoup(html, 'html.parser')
+    page = BeautifulSoup(html, 'html.parser')
 
     # If only doing primary content, filter webpage
     if args.primary_only:
-        webpage = webpage.find('div', class_=PRIMARY_CONTENT_CLASS)
+        webpage = page.find('div', class_=PRIMARY_CONTENT_CLASS)
 
     # Get all posters in this set, create Content and add to list
     content_list = ContentList()
-    for poster_element in webpage.find_all('div',
-                                           class_='overlay rounded-poster'):
+    for poster_element in page.find_all('div', class_='overlay rounded-poster'):
         content = Content(
             poster_element.attrs['data-poster-id'],
             poster_element.attrs['data-poster-type'].lower(),
