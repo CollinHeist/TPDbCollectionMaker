@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "tpdbcollectionmaker"
+version = "0.2.1"
+description = "Quickly make Plex Meta Manager poster entries from ThePosterDatabase sets"
+authors = ["Collin Heist <collinheist@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+beautifulsoup4 = "^4.12.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

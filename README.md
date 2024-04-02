@@ -1,17 +1,21 @@
 # TPDbCollectionMaker
-Python script to quickly make Plex-Meta-Manager poster entries from [ThePosterDatabase](https://theposterdb.com) (TPDb) sets.
+Python script to quickly make Plex-Meta-Manager poster entries from
+[ThePosterDatabase](https://theposterdb.com) (TPDb) sets.
 
 Because TPDb doesn't permit automated scraping, this tool reads HTML files.
 
-This tool will read handle collections, movies, shows, and season posters all in one file and output YAML that can be used in Plex-Meta-Manager metadata files. An example of part of the output for TheDoctor30's [Marvel Television Set](https://theposterdb.com/set/11318) is shown below:
+This tool will read handle collections, movies, shows, and season posters all in
+one file and output YAML that can be used in Plex-Meta-Manager metadata files.
+An example of part of the output for TheDoctor30's
+[Marvel Television Set](https://theposterdb.com/set/11318) is shown below:
 
 ```yaml
 # --------------------------------------------------------------------------------
-# Collections
+# collections
 Marvel Television:
   url_poster: https://theposterdb.com/api/assets/19724
 # --------------------------------------------------------------------------------
-# Shows
+# shows
 Marvel's Daredevil:
   url_poster: https://theposterdb.com/api/assets/19725
   seasons:
@@ -37,7 +41,7 @@ Marvel's Luke Cage:
 This is a Python command-line tool. All arguments are shown with `--help`:
 
 ```console
-$ pipenv run python main.py -h
+$ poetry run python main.py -h
 usage: main.py [-h] [-p] [-q] HTML_FILE
 
 TPDb Collection Maker
@@ -52,22 +56,27 @@ optional arguments:
   ```
 
 ## Installation
-> NOTE: If copying these commands, do __not__ copy the `$` - that is just to show this is a _command_.
-1. Install `pipenv`:
-```console
-$ pip3 install pipenv
-```
-2. Install required packages:
-```console
-$ pipenv install
-```
-3. Download this tool:
+
+> NOTE: If copying these commands, do __not__ copy the `$` - that is just to
+show this is a _command_.
+
+1. Install `poetry` - see [here](https://python-poetry.org/docs/#installation)
+with the `pipx` method.
+
+2. Download this tool:
 ```console
 $ git clone https://github.com/CollinHeist/TPDbCollectionMaker/
 ```
 
+3. Run the script (see [Arguments](#arguments) for details).
+```
+cd TPDbCollectionMaker
+poetry run python main.py -h
+```
+
 ## Getting Page HTML
-Because TPDb doesn't permit automated scraping, this tool reads HTML files. To get the HTML of a set, right-click the set page and select `Inspect`:
+Because TPDb doesn't permit automated scraping, this tool reads HTML files. To
+get the HTML of a set, right-click the set page and select `Inspect`:
 
 <img src="https://user-images.githubusercontent.com/17693271/168729610-42ac80fc-afb7-40b4-a6bd-39b3f310619c.jpg" width="600"/>
 
@@ -75,7 +84,8 @@ This should launch your browser's HTML inspector. It should look something like:
 
 <img src="https://user-images.githubusercontent.com/17693271/168729837-eacfc4d8-29d3-4968-80f2-17ed164a8884.jpg" width="600"/>
 
-Go to the top-most HTML element (if HTML is selected, hold the left-arrow key to collapse all the HTML). The top-most HTML should look like:
+Go to the top-most HTML element (if HTML is selected, hold the left-arrow key
+to collapse all the HTML). The top-most HTML should look like:
 
 ```html
 <!DOCTYPE html>
@@ -83,22 +93,27 @@ Go to the top-most HTML element (if HTML is selected, hold the left-arrow key to
 ...
 ```
 
-Right-click the `<html class="h-100" lang="en"><head>` element, go to `Copy` > `Inner HTML`. Your clipboard now has the complete HTML of the set page; paste this into some file alongside the `main.py` file of this project. This file will be the input to the script (see below).
+Right-click the `<html class="h-100" lang="en"><head>` element, go to `Copy` >
+`Inner HTML`. Your clipboard now has the complete HTML of the set page; paste
+this into some file alongside the `main.py` file of this project. This file will
+be the input to the script (see below).
 
 ## Arguments
 ### `html`
 Input HTML file to parse.
 
 ### `-p`, `--primary-only`
-Only parse the primary content on the given HTML page, ignoring any Additional Sets. If unspecified, then the entire page is parsed.
+Only parse the primary content on the given HTML page, ignoring any Additional
+Sets. If unspecified, then the entire page is parsed.
 
 ### `-q`, `--always-quote`
-Quote all titles in the output. If unspecified, only titles with colons are quoted.
+Quote all titles in the output. If unspecified, only titles with colons are
+quoted.
 
 Below is an example of this argument:
 
 ```console
-$ pipenv run python main.py in.html --always-quote
+$ poetry run python main.py in.html --always-quote
 "Iron Man (2008)":
   url_poster: https://theposterdb.com/api/assets/9773
 "The Incredible Hulk (2008)":
