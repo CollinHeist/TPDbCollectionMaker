@@ -74,7 +74,7 @@ cd TPDbCollectionMaker
 poetry install
 ```
 
-3. Run the script (see [Arguments](#arguments) for details).
+4. Run the script (see [Arguments](#arguments) for details).
 ```
 poetry run python main.py -h
 ```
