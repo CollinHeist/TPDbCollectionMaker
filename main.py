@@ -6,7 +6,7 @@ from typing import Iterable, Literal
 try:
     from bs4 import BeautifulSoup
 except ImportError:
-    print(f'Missing required packages - execute "pipenv install"')
+    print(f'Missing required packages - execute "poetry install"')
     exit(1)
 
 
