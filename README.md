@@ -68,9 +68,14 @@ with the `pipx` method.
 $ git clone https://github.com/CollinHeist/TPDbCollectionMaker/
 ```
 
+3. Install the Python dependencies:
+```console
+cd TPDbCollectionMaker
+poetry install
+```
+
 3. Run the script (see [Arguments](#arguments) for details).
 ```
-cd TPDbCollectionMaker
 poetry run python main.py -h
 ```
 
