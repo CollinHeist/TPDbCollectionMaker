@@ -282,10 +282,13 @@ if __name__ == '__main__':
     # If only doing primary content, filter webpage
     if args.primary_only:
         webpage = page.find('div', class_=PRIMARY_CONTENT_CLASS)
+        posters = webpage.find_all('div', class_='overlay rounded-poster')
+    else:
+        posters = page.find_all('div', class_='overlay rounded-poster')
 
     # Get all posters in this set, create Content and add to list
     content_list = ContentList()
-    for poster_element in page.find_all('div', class_='overlay rounded-poster'):
+    for poster_element in posters:
         content = Content(
             poster_element.attrs['data-poster-id'],
             poster_element.attrs['data-poster-type'].lower(),
