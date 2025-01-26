@@ -41,7 +41,7 @@ Marvel's Luke Cage:
 This is a Python command-line tool. All arguments are shown with `--help`:
 
 ```console
-$ poetry run python main.py -h
+$ uv run main.py -h
 usage: main.py [-h] [-p] [-q] HTML_FILE
 
 TPDb Collection Maker
@@ -60,23 +60,21 @@ optional arguments:
 > NOTE: If copying these commands, do __not__ copy the `$` - that is just to
 show this is a _command_.
 
-1. Install `poetry` - see [here](https://python-poetry.org/docs/#installation)
-with the `pipx` method.
+1. Install `uv` (you may type `python`, or `py` instead of `python3`).
+
+```console
+python3 pip install uv
+```
 
 2. Download this tool:
 ```console
-$ git clone https://github.com/CollinHeist/TPDbCollectionMaker/
+git clone https://github.com/CollinHeist/TPDbCollectionMaker/
 ```
 
-3. Install the Python dependencies:
-```console
-cd TPDbCollectionMaker
-poetry install
+3. Run the script (see [Arguments](#arguments) for details). The following
+command prints the help menu.
 ```
-
-4. Run the script (see [Arguments](#arguments) for details).
-```
-poetry run python main.py -h
+uv run main.py -h
 ```
 
 ## Getting Page HTML
@@ -118,7 +116,7 @@ quoted.
 Below is an example of this argument:
 
 ```console
-$ poetry run python main.py in.html --always-quote
+$ uv run main.py in.html --always-quote
 "Iron Man (2008)":
   url_poster: https://theposterdb.com/api/assets/9773
 "The Incredible Hulk (2008)":
