@@ -1,11 +1,11 @@
 # TPDbCollectionMaker
-Python script to quickly make Plex-Meta-Manager poster entries from
+Python script to quickly make Kometa (PMM) poster entries from
 [ThePosterDatabase](https://theposterdb.com) (TPDb) sets.
 
 Because TPDb doesn't permit automated scraping, this tool reads HTML files.
 
 This tool will read handle collections, movies, shows, and season posters all in
-one file and output YAML that can be used in Plex-Meta-Manager metadata files.
+one file and output YAML that can be used in Kometa metadata files.
 An example of part of the output for TheDoctor30's
 [Marvel Television Set](https://theposterdb.com/set/11318) is shown below:
 
